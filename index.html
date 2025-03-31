@@ -6,7 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-       
+       #container {
+       	border-radius: 8px;
+           background-color: #F5F5F5;
+           padding: 20px;       
+      }
+      #add-btn {
+          border: solid 1px;
+      	background-color: #32de84;
+          border-radius: 5px;
+      	}
+      #clear-btn {
+          border: solid 1px;
+      	background-color: #FF033E;
+          border-radius: 5px;
+      	}
     </style>
 </head>
 <body>
@@ -22,6 +36,7 @@
     <button id="add-btn" onclick="addEntry()">Add</button>
     <br><br>
     <button id="clear-btn" onclick="clearAllData()">Clear All Data</button>
+    <br><br>
     <div id="container"></div>
 </body>
 </html>
