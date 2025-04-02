@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- Add your CSS links here -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Your content goes here -->
+    <h1>ExpenseTracker.app</h1>
+    <button onclick="addDiv()" id='btn2'>Add a day</button>
+    <button onclick="clearAllData()" id='clear-btn'>Clear All Data</button>
+    <br><br>
+    <input id="amt-input" type="text" disabled>
+    <select id="mySelect">
+    <option>Food</option>
+    <option>Tea/Cig/Bakery</option>
+    <option>Travel</option>
+    <option>Grocery</option>
+    <option>Other</option>
+    <option>End-day</option>
+  </select> 
+    <button id="btn" onclick="addEntry()" disabled>Enter</button>
+    <script src="app.js"></script>
+</body>
+</html>
