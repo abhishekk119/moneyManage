@@ -1,3 +1,4 @@
+// Original variables and functions (unchanged)
 let counter = 0;
 let lastCreatedDiv = null;
 let spent = [];
@@ -87,120 +88,74 @@ function addEntry() {
     saveToLocalStorage();
 }
 
-// ===== LOCAL STORAGE FUNCTIONALITY =====
-// (Added without modifying existing functions)
-
-// Save current state to local storage
+// NEW: Simplified localStorage functionality
 function saveToLocalStorage() {
-    const dataToSave = {
+    // Save the entire body's HTML (simple approach)
+    localStorage.setItem('expenseTrackerHTML', document.body.innerHTML);
+    
+    // Save variables
+    localStorage.setItem('expenseTrackerData', JSON.stringify({
         counter: counter,
-        lastCreatedDivId: lastCreatedDiv ? lastCreatedDiv.id : null,
-        spent: [...spent],
+        spent: spent,
         showToday: showToday,
-        divs: []
-    };
-
-    // Save all div elements
-    document.querySelectorAll('.dynamic-div1').forEach(div => {
-        const divData = {
-            id: div.id,
-            content: div.innerHTML,
-            display: div.style.display,
-            dateElement: null
-        };
-
-        // Find the corresponding date/button div
-        const nextSibling = div.nextElementSibling;
-        if (nextSibling && nextSibling.querySelector('button.dynamic-btn')) {
-            divData.dateElement = nextSibling.innerHTML;
-        }
-
-        dataToSave.divs.push(divData);
-    });
-
-    localStorage.setItem('expenseTrackerData', JSON.stringify(dataToSave));
+        lastCreatedDivId: lastCreatedDiv ? lastCreatedDiv.id : null,
+        amtInputDisabled: document.getElementById("amt-input").disabled,
+        btnDisabled: document.getElementById("btn").disabled,
+        btn2Disabled: document.getElementById("btn2").disabled
+    }));
 }
 
-// Load data from local storage
 function loadFromLocalStorage() {
+    const savedHTML = localStorage.getItem('expenseTrackerHTML');
     const savedData = localStorage.getItem('expenseTrackerData');
-    if (!savedData) return;
-
-    const parsedData = JSON.parse(savedData);
-    counter = parsedData.counter;
-    spent = [...parsedData.spent];
-    showToday = parsedData.showToday;
-
-    // Recreate all div elements
-    parsedData.divs.forEach(divData => {
-        // Create content div
-        const div = document.createElement('div');
-        div.id = divData.id;
-        div.className = 'dynamic-div1';
-        div.innerHTML = divData.content;
-        div.style.display = divData.display || 'block';
-        document.body.appendChild(div);
-
-        // Create date/button div if it exists
-        if (divData.dateElement) {
-            const div2 = document.createElement('div');
-            div2.innerHTML = divData.dateElement;
-            document.body.appendChild(div2);
-
-            // Reattach event listener to button
-            const button = div2.querySelector('button.dynamic-btn');
-            if (button) {
-                button.addEventListener('click', function() {
-                    if (document.getElementById(div.id).style.display === "block") {
-                        document.getElementById(div.id).style.display = "none";
-                    } else {
-                        document.getElementById(div.id).style.display = "block";
-                    }
-                    saveToLocalStorage();
-                });
-            }
-        }
-
-        // Set lastCreatedDiv if this is the most recent one
-        if (divData.id === parsedData.lastCreatedDivId) {
-            lastCreatedDiv = div;
-        }
-
-        // Restore disabled states if this div has a summary
-        if (div.querySelector('.dynamic-h4')) {
-            document.getElementById("btn2").disabled = false;
-            document.getElementById("amt-input").disabled = true;
-            document.getElementById("btn").disabled = true;
-        }
-    });
-}
-
-// Clear all data (call this from your HTML button)
-function clearAllData() {
-    if (confirm("Are you sure you want to delete all expense data? This cannot be undone.")) {
-        // Clear local storage
-        localStorage.removeItem('expenseTrackerData');
+    
+    if (savedHTML && savedData) {
+        // Restore HTML first
+        document.body.innerHTML = savedHTML;
         
-        // Remove all dynamically created elements
-        document.querySelectorAll('.dynamic-div1').forEach(div => div.remove());
-        document.querySelectorAll('div').forEach(div => {
-            if (div.querySelector('button.dynamic-btn')) {
-                div.remove();
-            }
+        // Restore variables
+        const parsedData = JSON.parse(savedData);
+        counter = parsedData.counter;
+        spent = parsedData.spent;
+        showToday = parsedData.showToday;
+        
+        // Restore last created div reference
+        if (parsedData.lastCreatedDivId) {
+            lastCreatedDiv = document.getElementById(parsedData.lastCreatedDivId);
+        }
+        
+        // Restore form states
+        document.getElementById("amt-input").disabled = parsedData.amtInputDisabled;
+        document.getElementById("btn").disabled = parsedData.btnDisabled;
+        document.getElementById("btn2").disabled = parsedData.btn2Disabled;
+        
+        // Reattach event listeners to all buttons
+        document.querySelectorAll('.dynamic-btn').forEach(button => {
+            const divId = button.closest('div').previousElementSibling.id;
+            button.addEventListener('click', function() {
+                const div = document.getElementById(divId);
+                if (div.style.display === "block") {
+                    div.style.display = "none";
+                } else {
+                    div.style.display = "block";
+                }
+                saveToLocalStorage();
+            });
         });
-        
-        // Reset variables
-        counter = 0;
-        lastCreatedDiv = null;
-        spent = [];
-        
-        // Reset form controls
-        document.getElementById("amt-input").disabled = false;
-        document.getElementById("btn").disabled = false;
-        document.getElementById("btn2").disabled = true;
-        document.getElementById("amt-input").value = '';
     }
 }
 
-// Load saved data when page loads
-window.addEventListener('DOMContentLoaded', loadFromLocalStorage);
+function clearAllData() {
+    if (confirm("Are you sure you want to delete all expense data? This cannot be undone.")) {
+        localStorage.clear();
+        location.reload(); // Simplest way to reset everything
+    }
+}
+
+// Initialize
+window.addEventListener('DOMContentLoaded', function() {
+    loadFromLocalStorage();
+    
+    // Save when leaving the page
+    window.addEventListener('beforeunload', saveToLocalStorage);
+});
