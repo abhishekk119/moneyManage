@@ -1,10 +1,67 @@
-// Original variables and functions (unchanged)
 let counter = 0;
 let lastCreatedDiv = null;
 let spent = [];
 
 let today = new Date();
 let showToday = today.toDateString();
+
+// Load data from localStorage when page loads
+window.addEventListener('DOMContentLoaded', (event) => {
+    loadFromLocalStorage();
+    
+    // Add click event to existing clear button (assuming it has id 'clearBtn')
+    document.getElementById('clearBtn').addEventListener('click', clearAllData);
+});
+
+function saveToLocalStorage() {
+    const appState = {
+        counter: counter,
+        lastCreatedDivId: lastCreatedDiv ? lastCreatedDiv.id : null,
+        spent: spent,
+        htmlContent: document.body.innerHTML,
+        showToday: showToday
+    };
+    localStorage.setItem('expenseTrackerAppState', JSON.stringify(appState));
+}
+
+function loadFromLocalStorage() {
+    const savedState = localStorage.getItem('expenseTrackerAppState');
+    if (savedState) {
+        const appState = JSON.parse(savedState);
+        counter = appState.counter;
+        spent = appState.spent || [];
+        showToday = appState.showToday;
+        
+        document.body.innerHTML = appState.htmlContent;
+        
+        // Reattach event listeners to dynamic elements
+        if (appState.lastCreatedDivId) {
+            lastCreatedDiv = document.getElementById(appState.lastCreatedDivId);
+        }
+        
+        // Reattach button event listeners
+        const buttons = document.querySelectorAll('.dynamic-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const divId = this.parentElement.previousElementSibling.id;
+                if (document.getElementById(divId).style.display === "block") {
+                    document.getElementById(divId).style.display = "none";
+                } else {
+                    document.getElementById(divId).style.display = "block";
+                }
+                saveToLocalStorage();
+            });
+        });
+        
+        // Reattach click event to clear button after loading
+        document.getElementById('clearBtn').addEventListener('click', clearAllData);
+    }
+}
+
+function clearAllData() {
+    localStorage.removeItem('expenseTrackerAppState');
+    location.reload(); // Refresh the page to reset to initial state
+}
 
 function addDiv() {
     let timestamp = Date.now();
@@ -87,75 +144,3 @@ function addEntry() {
     document.getElementById("amt-input").value = ' ';
     saveToLocalStorage();
 }
-
-// NEW: Simplified localStorage functionality
-function saveToLocalStorage() {
-    // Save the entire body's HTML (simple approach)
-    localStorage.setItem('expenseTrackerHTML', document.body.innerHTML);
-    
-    // Save variables
-    localStorage.setItem('expenseTrackerData', JSON.stringify({
-        counter: counter,
-        spent: spent,
-        showToday: showToday,
-        lastCreatedDivId: lastCreatedDiv ? lastCreatedDiv.id : null,
-        amtInputDisabled: document.getElementById("amt-input").disabled,
-        btnDisabled: document.getElementById("btn").disabled,
-        btn2Disabled: document.getElementById("btn2").disabled
-    }));
-}
-
-function loadFromLocalStorage() {
-    const savedHTML = localStorage.getItem('expenseTrackerHTML');
-    const savedData = localStorage.getItem('expenseTrackerData');
-    
-    if (savedHTML && savedData) {
-        // Restore HTML first
-        document.body.innerHTML = savedHTML;
-        
-        // Restore variables
-        const parsedData = JSON.parse(savedData);
-        counter = parsedData.counter;
-        spent = parsedData.spent;
-        showToday = parsedData.showToday;
-        
-        // Restore last created div reference
-        if (parsedData.lastCreatedDivId) {
-            lastCreatedDiv = document.getElementById(parsedData.lastCreatedDivId);
-        }
-        
-        // Restore form states
-        document.getElementById("amt-input").disabled = parsedData.amtInputDisabled;
-        document.getElementById("btn").disabled = parsedData.btnDisabled;
-        document.getElementById("btn2").disabled = parsedData.btn2Disabled;
-        
-        // Reattach event listeners to all buttons
-        document.querySelectorAll('.dynamic-btn').forEach(button => {
-            const divId = button.closest('div').previousElementSibling.id;
-            button.addEventListener('click', function() {
-                const div = document.getElementById(divId);
-                if (div.style.display === "block") {
-                    div.style.display = "none";
-                } else {
-                    div.style.display = "block";
-                }
-                saveToLocalStorage();
-            });
-        });
-    }
-}
-
-function clearAllData() {
-    if (confirm("Are you sure you want to delete all expense data? This cannot be undone.")) {
-        localStorage.clear();
-        location.reload(); // Simplest way to reset everything
-    }
-}
-
-// Initialize
-window.addEventListener('DOMContentLoaded', function() {
-    loadFromLocalStorage();
-    
-    // Save when leaving the page
-    window.addEventListener('beforeunload', saveToLocalStorage);
-});
