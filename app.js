@@ -2,6 +2,8 @@ let counter = 0;
 let lastCreatedDiv = null;
 let spent = [];
 
+let today = new Date();
+let showToday = today.toDateString();
 
 // Load data from localStorage when page loads
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -62,8 +64,6 @@ function clearAllData() {
 }
 
 function addDiv() {
-    let today = new Date();
-    let showToday = today.toDateString();
     let timestamp = Date.now();
     document.getElementById("amt-input").disabled = false;
     document.getElementById("btn").disabled = false;
