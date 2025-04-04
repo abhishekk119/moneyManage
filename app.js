@@ -76,12 +76,14 @@ function addDiv() {
     let div = document.createElement('div');
     div.classList.add('dynamic-div1');
     let div2 = document.createElement('div');
+    let hr = document.createElement('hr');
     div.id = `div-${counter++}`;
     document.body.append(div);
     document.body.append(div2);
     lastCreatedDiv = div;
     div2.append(p);
     div2.append(button);
+    div2.append(hr);
     button.addEventListener('click', function() {
         if (document.getElementById(div.id).style.display === "block") {
             document.getElementById(div.id).style.display = "none";
