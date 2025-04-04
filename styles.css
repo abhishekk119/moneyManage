@@ -1,29 +1,41 @@
 #btn2 {
-	border: solid 1px;
-	background-color: #FEBE10;
-	border-radius: 3px;
-	color: white;
+	border: solid 2px black;
+	background-color: white;
+	border-radius: 8px;
+	color: black;
+	font-weight: bold;
+	height: 30px;
+	width: 130px;
 	}
 
 #clear-btn {
-	border: solid 1px;
-	background-color: #EF0107;
-	border-radius: 3px;
-	color: white;
+	border: solid 2px black;
+	background-color: white;
+	border-radius: 8px;
+	color: black;
+	font-weight: bold;
+	height: 30px;
+	width: 130px;
 	}
 	
 #btn {
-	border: solid 1px;
-	background-color: #03C03C;
-	border-radius: 3px;
-	color: white;
+	border: solid 2px black;
+	background-color: white;
+	border-radius: 8px;
+	color: black;
+	font-weight: bold;
+	height: 40px;
+	width: 100px;
 	}
 	
 .dynamic-btn {
-	border: solid 1px;
-	background-color: #720e9e;
-	border-radius: 3px;
-	color: white;
+	border: solid 2px black;
+	background-color: white;
+	border-radius: 8px;
+	color: black;
+	font-weight: bold;
+	height: 30px;
+	width: 130px;
 	}
 	
 .dynamic-h3 {
@@ -45,7 +57,141 @@
 	}
 	
 h1 {
-  color: #007FFF;
+  color: black;
+  font-size: 30px;
+  font-weight: bold;
+  font-family:cursive;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+
+input {
+  /* Box Model */
+  width: 150px;
+  height: 40px;
+  max-width: 400px;
+  padding: 12px 15px;
+  margin: 8px 0;
+  box-sizing: border-box;
+
+  /* Borders */
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+
+  /* Typography */
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  color: #333;
+
+  /* Transitions */
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Focus State */
+input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Disabled State */
+input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Target the <select> element */
+select {
+  /* Basic Box Styles */
+  width: 100px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  
+  /* Typography */
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: #333;
+  
+  /* Dropdown Arrow */
+  appearance: none; /* Removes default arrow */
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+/* Hover/Focus States */
+select:hover {
+  border-color: #888;
+}
+
+select:focus {
+  outline: none;
+  border-color: #0066ff;
+  box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.2);
+}
 	
+/* Add this to your styles.css file */
+
+/* Container for the form elements */
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between elements */
+  margin: 10px 0;
+}
+
+/* Input field */
+#amt-input {
+  /* Box Model */
+  width: 100px;
+  height: 40px; /* Fixed height to match others */
+  padding: 0 15px; /* Adjusted padding for better alignment */
+  
+  /* Keep your existing styles */
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  color: #333;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Select element */
+#mySelect {
+  /* Box Model */
+  height: 40px; /* Match the input height */
+  padding: 0 15px; /* Adjusted padding */
+  width: 150px; /* Fixed width */
+  
+  /* Keep your existing styles */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: #333;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+/* Enter button */
+#btn {
+  /* Box Model */
+  height: 40px; /* Match the others */
+  width: 100px;
+  padding: 0; /* Remove default padding */
+  
+  /* Keep your existing styles */
+  border: solid 2px black;
+  background-color: white;
+  border-radius: 8px;
+  color: black;
+  font-weight: bold;
+}
